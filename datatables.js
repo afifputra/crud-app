@@ -1,3 +1,3 @@
-let table = new DataTable('#table_id', {
-    // options
-});
+$(document).ready( function () {
+    $('#table_id').DataTable();
+} );
