@@ -22,7 +22,7 @@
         }
     }
 ?>
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <!-- Required meta tags -->
@@ -30,7 +30,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- Bootstrap CSS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css">
         <title>CRUD App</title>
     </head>
     <body>
@@ -44,17 +44,19 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col">
-                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#tambahModal">Tambah Data</button>
+            <div class="d-flex justify-content-center">
+                <div class="row mb-3 justify-content-center">
+                    <div class="col">
+                        <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#tambahModal">Tambah Data</button>
+                    </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col ">
+            <div class="row d-flex justify-content-center">
+                <div class="col-10">
                 <?php
                     $i = 1;
                 ?>
-                    <table id="table_id" class="table">
+                    <table id="dataKaryawan" class="table">
                         <thead>
                             <tr>
                                 <th>No</th>
@@ -79,9 +81,9 @@
                                 </td>
 
                                 <td>
-                                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editModal">
+                                    <a type="button" class="btn btn-sm btn-outline-primary" data-placement="bottom" onclick="$('#editModal<?= $employee['id'];?>').modal('show');">
                                         Edit
-                                    </button>
+                                    </a>
                                     <a type="button" class="btn btn-sm btn-outline-danger" href="hapus.php?id=<?= $employee['id'] ?>" onclick="return confirm('Apakah anda yakin ingin menghapus data ?');">
                                         Delete
                                     </a>
@@ -158,7 +160,9 @@
             </div>
         </div>
     </body>
-    <script src="datatables.js"></script>
-    <script src="http://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="datatables.js"></script>
 </html>
