@@ -1,27 +1,52 @@
 <?php
     require 'functions.php ';
     
-    $employees = query("SELECT * FROM karyawan");
+    $employees = BuatQuery("SELECT * FROM karyawan");
 
-    if (isset($_POST["submit"])) {
+    // if (isset($_POST["submit"])) {
 
-        if (tambahData($_POST) > 0) {
+    //     if (TambahData($_POST) > 0) {
+    //         // echo "
+    //         //     <script>
+    //         //         $(document).ready(function() {
+    //         //             $('#container').load('index.php');
+    //         //         var refreshId = setInterval(function() {
+    //         //             $('#container').load('index.php');
+    //         //         }, 9000);
+    //         //         $.ajaxSetup({ cache: false });
+    //         //     </script>
+    //         // ";
+    //     }
+    //     else {
+    //         // echo "
+    //         //     <script>
+    //         //         notifSuksesModal.show();
+    //         //     </script>
+    //         // ";
+    //     }
+    // }
+
+    if (isset($_POST["edit"])) {
+        
+        if (EditData($_POST) > 0) {
             echo "
                 <script>
-                    alert('data berhasil ditambahkan');
+                    alert('data berhasil diedit');
                     document.location.href = 'index.php';
-                </script>                
+                </script>
             ";
-        }
-        else {
+        } else {
             echo "
                 <script>
-                    alert('data gagal ditambahkan');
+                    alert('data gagal diedit');
                     document.location.href = 'index.php';
+                </script>
             ";
         }
+        
     }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -47,7 +72,7 @@
             <div class="d-flex justify-content-center">
                 <div class="row mb-3 justify-content-center">
                     <div class="col">
-                        <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#tambahModal">Tambah Data</button>
+                        <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#tambahModal" id="tambah">Tambah Data</button>
                     </div>
                 </div>
             </div>
@@ -59,12 +84,12 @@
                     <table id="dataKaryawan" class="table">
                         <thead>
                             <tr>
-                                <th>No</th>
-                                <th>Nama</th>
-                                <th>Tempat, Tanggal Lahir</th>
-                                <th>Jabatan</th>
-                                <th>Foto</th>
-                                <th>Action</th>
+                                <th class="text-center">No</th>
+                                <th class="text-center">Nama</th>
+                                <th class="text-center">Tempat, Tanggal Lahir</th>
+                                <th class="text-center">Jabatan</th>
+                                <th class="text-center">Foto</th>
+                                <th class="text-center" class="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -72,16 +97,15 @@
                             foreach($employees as $employee):
                             ?>
                             <tr>
-                                <td><?= $i; ?></td>
-                                <td><?= $employee['nama'];?></td>
-                                <td><?= $employee["tmptlahir"].", ".date('h M Y', strtotime($employee["tgllahir"]));?></td>
-                                <td><?= $employee['jabatan'];?></td>
-                                <td>
+                                <td class="text-center"><?= $i; ?></td>
+                                <td class="text-center"><?= $employee['nama'];?></td>
+                                <td class="text-center"><?= $employee["tmptlahir"].", ".date('d F Y', strtotime($employee["tgllahir"]));?></td>
+                                <td class="text-center"><?= $employee['jabatan'];?></td>
+                                <td class="text-center">
                                     <img src="img/<?= $employee["foto"];?>" alt="">
                                 </td>
-
-                                <td>
-                                    <a type="button" class="btn btn-sm btn-outline-primary" data-placement="bottom" onclick="$('#editModal<?= $employee['id'];?>').modal('show');">
+                                <td class="text-center">
+                                    <a type="button" data-action="edit" data-id="<?= $employee['id']?>" class="btn btn-sm btn-outline-primary edit" data-placement="bottom" onclick="$('#tambahModal').modal('show');">
                                         Edit
                                     </a>
                                     <a type="button" class="btn btn-sm btn-outline-danger" href="hapus.php?id=<?= $employee['id'] ?>" onclick="return confirm('Apakah anda yakin ingin menghapus data ?');">
@@ -103,11 +127,11 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Tambah Data</h5>
+                            <h5 class="modal-title" id="textTambah">Tambah Data</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body">
-                            <form action="" method="post">
+                        <form action="" method="post" enctype="multipart/form-data" id="formTambah">
+                            <div class="modal-body">
                                 <label for="nama">Nama</label>
                                 <input id="nama" name="nama" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                                 <label for="tmptlahir">Tempat Lahir</label>
@@ -117,14 +141,15 @@
                                 <label for="jabatan">Jabatan</label>
                                 <input id="jabatan" name="jabatan" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                                 <label for="foto">Foto</label>
-                                <input id="foto" name="foto" type="file" class="form-control" required>
-                                <br>
-                                <div class="modal-footer">
-                                    <button type="close" name="close" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" name="submit" class="btn btn-primary">Tambah</button>
-                                </div>
-                            </form>
-                        </div>
+                                <!-- <input id="foto" name="foto" type="file" class="form-control" required> -->
+                                <input id="foto" name="foto" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                                <!-- <input type="hidden" name="aksi" id="aksi" value="aksi"> -->
+                            </div>
+                            <div class="modal-footer">
+                                <button type="close" name="close" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" name="submit" id="btn-tambah" value="Save to database" class="btn btn-primary">Tambah</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -133,36 +158,57 @@
             <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Edit Data</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="" method="post">
-                            <label for="nama">Nama</label>
-                            <input id="nama" name="nama" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="<?= $employee['nama'];?>">
-                            <label for="tmptlahir">Tempat Lahir</label>
-                            <input id="tmptlahir" name="tmptlahir" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-                            <label for="tgllahir">Tanggal Lahir</label>
-                            <input id="tgllahir" name="tgllahir" type="date" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-                            <label for="jabatan">Jabatan</label>
-                            <input id="jabatan" name="jabatan" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-                            <label for="foto">Foto</label>
-                            <input id="foto" name="foto" type="file" class="form-control">
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Tambah</button>
-                    </div>
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Edit Data</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                            <form action="" method="post" enctype="multipart/form-data">
+                                <div class="modal-body">
+                                    <input type="hidden" name="id">
+                                    <label for="nama">Nama</label>
+                                    <input id="nama" name="nama" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                    <label for="tmptlahir">Tempat Lahir</label>
+                                    <input id="tmptlahir" name="tmptlahir" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                    <label for="tgllahir">Tanggal Lahir</label>
+                                    <input id="tgllahir" name="tgllahir" type="date" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                    <label for="jabatan">Jabatan</label>
+                                    <input id="jabatan" name="jabatan" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                    <label for="foto">Foto</label>
+                                    <input id="foto" name="foto" type="file" class="form-control">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" name="edit" class="btn btn-primary">Edit</button>
+                                </div>
+                            </form>
                     </div>
                 </div>
             </div>
+
+            <!-- Notif Sukses -->
+            <div class="modal fade" id="notifikasiSukses" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalToggleLabel">Modal 1</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            ..
+                        </div>
+                        <div class="modal-footer">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
         </div>
     </body>
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="script.js"></script>
     <script src="datatables.js"></script>
 </html>

@@ -2,7 +2,7 @@
 
 require 'functions.php';
 
-if (hapusData($_GET['id']) > 0) {
+if (HapusData($_GET['id']) > 0) {
     echo "
         <script>
             alert('data berhasil dihapus');
