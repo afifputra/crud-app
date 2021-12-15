@@ -4,14 +4,15 @@
 
     $aksi = $_POST['aksi'];
 
-    // var_dump($aksi);
-
-    if ($aksi=="insert") {
-        TambahData($_POST);
-    } elseif ($aksi=="getdata") {
+    if($aksi=="insert") {
+        TambahData($_POST, $_FILES);
+    } elseif($aksi=="getdata") {
         $getdata = GetData($_POST);
         echo json_encode($getdata);
-        // var_dump($getdata);
+    } elseif($aksi=="edit"){
+        EditData($_POST);
+    } elseif($aksi=="hapusdata"){
+        HapusData($_POST);
     }
 
     function GetData($id)
@@ -43,44 +44,57 @@
         return $rows;
     }
 
-    function TambahData($data)
+    function TambahData($data, $foto)
     {
         global $conn;
-
-        // return var_dump($data);
 
         $nama = htmlspecialchars($data["nama"]);
         $tmptlahir = htmlspecialchars($data["tmptlahir"]);
         $tgllahir = $data["tgllahir"];
         $jabatan = htmlspecialchars($data["jabatan"]);
-        $foto = $data["foto"];
 
-        $query = "INSERT INTO karyawan
-                    VALUES
-                    ('', '$nama', '$tmptlahir', '$tgllahir', '$jabatan', '$foto')
-        ";
+        $ekstensi_diperbolehkan = array('jpg','jpeg','png');
+        $namafoto = $foto['foto']['name'];
+        $x = explode('.', $namafoto);
+        $ekstensi = strtolower(end($x));
+        $ukuran = $foto['foto']['size'];
+        $file_tmp = $foto['foto']['tmp_name'];
+        $acak = rand(1,99);
+        $nama_unik = $acak.'-'.$namafoto;
+
+        if(in_array($ekstensi, $ekstensi_diperbolehkan) === true){
+            if($ukuran < 1044070){
+                move_uploaded_file($file_tmp, 'img/'.$nama_unik);
+                $query = "INSERT INTO karyawan
+                            VALUES
+                            ('', '$nama', '$tmptlahir', '$tgllahir', '$jabatan', '$nama_unik')
+                ";
+            }
+        }
 
         if(mysqli_query($conn, $query)){
             return json_encode(array("statusCode"=>200));
         } else {
             return json_encode(array("statusCode"=>201));
         }
-        // return mysqli_affected_rows($conn);
     }
 
     function HapusData($id)
     {
         global $conn;
-        mysqli_query($conn, "DELETE FROM karyawan WHERE id=$id");
-        return mysqli_affected_rows($conn);
 
+        $id = $id["id"];
+
+        if(mysqli_query($conn, "DELETE FROM karyawan WHERE id=$id")){
+            return json_encode(array("statusCode"=>200));
+        } else {
+            return json_encode(array("statusCode"=>201));
+        }
     }
 
     function EditData($data)
     {
         global $conn;
-
-        // return var_dump($data);
 
         $id = $data["id"];
         $nama = htmlspecialchars($data["nama"]);
@@ -98,9 +112,11 @@
                     foto = '$foto'
                     WHERE id =  $id";
 
-        $result = mysqli_query($conn, $query);
-
-        return mysqli_affected_rows($conn);
+        if(mysqli_query($conn, $query)){
+            return json_encode(array("statusCode"=>200));
+        } else {
+            return json_encode(array("statusCode"=>201));
+        }
     }
 
 ?>

@@ -105,11 +105,11 @@
                                     <img src="img/<?= $employee["foto"];?>" alt="">
                                 </td>
                                 <td class="text-center">
-                                    <a type="button" data-action="edit" data-id="<?= $employee['id']?>" class="btn btn-sm btn-outline-primary edit" data-placement="bottom" onclick="$('#tambahModal').modal('show');">
+                                    <a id="edit" type="button" data-action="edit" data-id="<?= $employee['id']?>" class="btn btn-sm btn-outline-primary edit" data-placement="bottom" onclick="$('#tambahModal').modal('show');">
                                         Edit
                                     </a>
-                                    <a type="button" class="btn btn-sm btn-outline-danger" href="hapus.php?id=<?= $employee['id'] ?>" onclick="return confirm('Apakah anda yakin ingin menghapus data ?');">
-                                        Delete
+                                    <a id="hapus" type="button" data-action="hapus" data-id="<?= $employee['id']?>" class="btn btn-sm btn-outline-danger hapus" data-placement="bottom"onclick="$('#hapusModal').modal('show');">
+                                        Hapus
                                     </a>
                                 </td>
                             </tr>
@@ -122,9 +122,13 @@
                 </div>
             </div>
 
-            <!-- Modal Tambah Data -->
+            
+            <!-- Modal Tambah Edit Data -->
             <div class="modal fade" id="tambahModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
+                    <div id="success" class="alert alert-success alert-dismissible" style="display:none;">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">X</a>
+                    </div>
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="textTambah">Tambah Data</h5>
@@ -132,21 +136,21 @@
                         </div>
                         <form action="" method="post" enctype="multipart/form-data" id="formTambah">
                             <div class="modal-body">
+                                <input type="hidden" name="id" id="id">
                                 <label for="nama">Nama</label>
-                                <input id="nama" name="nama" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                                <input id="nama" name="nama" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                                 <label for="tmptlahir">Tempat Lahir</label>
-                                <input id="tmptlahir" name="tmptlahir" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required> 
+                                <input id="tmptlahir" name="tmptlahir" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"> 
                                 <label for="tgllahir">Tanggal Lahir</label>
-                                <input id="tgllahir" name="tgllahir" type="date" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                                <input id="tgllahir" name="tgllahir" type="date" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                                 <label for="jabatan">Jabatan</label>
-                                <input id="jabatan" name="jabatan" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                                <input id="jabatan" name="jabatan" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                                 <label for="foto">Foto</label>
-                                <!-- <input id="foto" name="foto" type="file" class="form-control" required> -->
-                                <input id="foto" name="foto" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
-                                <!-- <input type="hidden" name="aksi" id="aksi" value="aksi"> -->
+                                <input id="foto" name="foto" type="file" class="form-control">
+                                <input type="hidden" name="aksi" id="aksi" value="">
                             </div>
                             <div class="modal-footer">
-                                <button type="close" name="close" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="close" name="close" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                                 <button type="submit" name="submit" id="btn-tambah" value="Save to database" class="btn btn-primary">Tambah</button>
                             </div>
                         </form>
@@ -154,55 +158,28 @@
                 </div>
             </div>
 
-            <!-- Modal Edit -->
-            <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
+            <!-- Modal Hapus -->
+            <div class="modal fade" id="hapusModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Edit Data</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                            <form action="" method="post" enctype="multipart/form-data">
-                                <div class="modal-body">
-                                    <input type="hidden" name="id">
-                                    <label for="nama">Nama</label>
-                                    <input id="nama" name="nama" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-                                    <label for="tmptlahir">Tempat Lahir</label>
-                                    <input id="tmptlahir" name="tmptlahir" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-                                    <label for="tgllahir">Tanggal Lahir</label>
-                                    <input id="tgllahir" name="tgllahir" type="date" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-                                    <label for="jabatan">Jabatan</label>
-                                    <input id="jabatan" name="jabatan" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-                                    <label for="foto">Foto</label>
-                                    <input id="foto" name="foto" type="file" class="form-control">
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" name="edit" class="btn btn-primary">Edit</button>
-                                </div>
-                            </form>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Notif Sukses -->
-            <div class="modal fade" id="notifikasiSukses" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalToggleLabel">Modal 1</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
                         <div class="modal-body">
-                            ..
+                            <p>Apakah Anda Yakin untuk Menghapus Data ?</p>
+                            <form action="" method="post" id="hapusForm">
+                                <input type="hidden" name="id" id="id" value="">
+                            </form>
                         </div>
                         <div class="modal-footer">
-
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" name="hapus" id="btn-hapus" class="btn btn-danger">Hapus</button>
                         </div>
                     </div>
                 </div>
             </div>
-            
+
         </div>
     </body>
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
