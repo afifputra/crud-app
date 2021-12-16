@@ -62,7 +62,13 @@
                   $nestedData['tgllahir'] = $r['tgllahir'];
                   $nestedData['jabatan'] = $r['jabatan'];
                   $nestedData['foto'] = $r['foto'];
-                  $nestedData['action'] = "<a href='#' class='btn-warning btn-sm'>Ubah</a>&nbsp; <a href='#' class='btn-danger btn-sm'>Hapus</a>";
+                  $nestedData['action'] = "
+                    <a id='edit' type='button' data-action='edit' data-id='".$r['id']."' class='btn btn-sm btn-outline-primary edit' data-placement='bottom' onclick='$('#tambahModal').modal('show');'>
+                        Edit
+                    </a>
+                    <a id='hapus' type='button' data-action='hapus' data-img='".$r['foto']."' data-id='".$r['id']."' class='btn btn-sm btn-outline-danger hapus' data-placement='bottom'onclick='$('#hapusModal').modal('show');'>
+                        Hapus
+                    </a>";
                   $data[] = $nestedData;
                   $no++;
               }
