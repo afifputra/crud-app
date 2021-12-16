@@ -8,6 +8,7 @@ $(document).ready(function() {
 
     $(".edit").click(function() {
         $('#textTambah').text('Edit Data');
+        $('button#btn-tambah').text('Edit Data');
         $('#aksi').val("edit");
         let id = $(this).data("id");
         let aksi = "getdata";
@@ -25,9 +26,60 @@ $(document).ready(function() {
                 $('#tmptlahir').val(dataResult[0].tmptlahir);
                 $('#tgllahir').val(dataResult[0].tgllahir);
                 $('#jabatan').val(dataResult[0].jabatan);
-                $('#foto').val(dataResult[0].foto);
+                $('#foto-lama').val(dataResult[0].foto);
             }
         })
+    });
+    
+    $(".hapus").click(function () {
+        let id = $(this).data("id");
+        let foto = $(this).data("img");
+        let aksi = "hapusdata";
+        $.ajax({
+            url: "functions.php",
+            type: "POST",
+            data: {
+                id: id,
+                foto: foto,
+                aksi: aksi
+            },
+            dataType: "json",
+            success: function(dataResult) {
+                if(dataResult.statusCode==200){
+                    $('#hapusModal').modal('toogle');			
+                }
+                else if(dataResult.statusCode==201){
+                    alert("Error occured !");
+                }
+            }
+        })
+    })
+
+    $('#formTambah').on('submit', function (e) {
+
+        e.preventDefault();
+        let form = new FormData(this);
+
+        $.ajax({
+        type: 'post',
+        url: 'functions.php',
+        data: form,
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        success: function (dataResult) {
+            console.log(dataResult);
+            if(dataResult.statusCode==200){
+                $("#success").show();
+				$('#success').html('Data added successfully !');
+                $('#dataKaryawan').DataTable().ajax.reload();
+            }
+            else if(dataResult.statusCode==201){
+                alert('Error');
+            }
+        }
+        });
+
     });
 
     // $('#btn-tambah').on('click', function() {
@@ -73,45 +125,4 @@ $(document).ready(function() {
     // }
     // });
 
-    $(".hapus").click(function () {
-        let id = $(this).data("id");
-        let aksi = "hapusdata";
-        $.ajax({
-            url: "functions.php",
-            type: "POST",
-            data: {
-                id: id,
-                aksi: aksi
-            },
-            dataType: "json",
-            success: function(dataResult) {
-                if(dataResult.statusCode==200){
-                    $('#hapusModal').modal('toogle');			
-                }
-                else if(dataResult.statusCode==201){
-                    alert("Error occured !");
-                }
-            }
-        })
-    })
-
-    $('#formTambah').on('submit', function (e) {
-
-        e.preventDefault();
-        let form = new FormData(this);
-        console.log(form);
-
-        $.ajax({
-        type: 'post',
-        url: 'functions.php',
-        data: form,
-        dataType: 'json',
-        processData: false,
-        contentType: false,
-        success: function () {
-            alert('formTambah was submitted');
-        }
-        });
-
-    });
 });

@@ -3,48 +3,6 @@
     
     $employees = BuatQuery("SELECT * FROM karyawan");
 
-    // if (isset($_POST["submit"])) {
-
-    //     if (TambahData($_POST) > 0) {
-    //         // echo "
-    //         //     <script>
-    //         //         $(document).ready(function() {
-    //         //             $('#container').load('index.php');
-    //         //         var refreshId = setInterval(function() {
-    //         //             $('#container').load('index.php');
-    //         //         }, 9000);
-    //         //         $.ajaxSetup({ cache: false });
-    //         //     </script>
-    //         // ";
-    //     }
-    //     else {
-    //         // echo "
-    //         //     <script>
-    //         //         notifSuksesModal.show();
-    //         //     </script>
-    //         // ";
-    //     }
-    // }
-
-    if (isset($_POST["edit"])) {
-        
-        if (EditData($_POST) > 0) {
-            echo "
-                <script>
-                    alert('data berhasil diedit');
-                    document.location.href = 'index.php';
-                </script>
-            ";
-        } else {
-            echo "
-                <script>
-                    alert('data gagal diedit');
-                    document.location.href = 'index.php';
-                </script>
-            ";
-        }
-        
-    }
 ?>
 
 <!DOCTYPE html>
@@ -108,7 +66,7 @@
                                     <a id="edit" type="button" data-action="edit" data-id="<?= $employee['id']?>" class="btn btn-sm btn-outline-primary edit" data-placement="bottom" onclick="$('#tambahModal').modal('show');">
                                         Edit
                                     </a>
-                                    <a id="hapus" type="button" data-action="hapus" data-id="<?= $employee['id']?>" class="btn btn-sm btn-outline-danger hapus" data-placement="bottom"onclick="$('#hapusModal').modal('show');">
+                                    <a id="hapus" type="button" data-action="hapus" data-img="<?= $employee["foto"];?>" data-id="<?= $employee['id']?>" class="btn btn-sm btn-outline-danger hapus" data-placement="bottom"onclick="$('#hapusModal').modal('show');">
                                         Hapus
                                     </a>
                                 </td>
@@ -148,6 +106,7 @@
                                 <label for="foto">Foto</label>
                                 <input id="foto" name="foto" type="file" class="form-control">
                                 <input type="hidden" name="aksi" id="aksi" value="">
+                                <input type="hidden" name="foto-lama" id="foto-lama">
                             </div>
                             <div class="modal-footer">
                                 <button type="close" name="close" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -170,6 +129,7 @@
                             <p>Apakah Anda Yakin untuk Menghapus Data ?</p>
                             <form action="" method="post" id="hapusForm">
                                 <input type="hidden" name="id" id="id" value="">
+                                <input type="hidden" name="foto" id="foto" value="">
                             </form>
                         </div>
                         <div class="modal-footer">
