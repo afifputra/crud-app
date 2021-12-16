@@ -36,9 +36,6 @@
             </div>
             <div class="row d-flex justify-content-center">
                 <div class="col-10">
-                <?php
-                    $i = 1;
-                ?>
                     <table id="dataKaryawan" class="table">
                         <thead>
                             <tr>
@@ -51,30 +48,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php 
-                            foreach($employees as $employee):
-                            ?>
-                            <tr>
-                                <td class="text-center"><?= $i; ?></td>
-                                <td class="text-center"><?= $employee['nama'];?></td>
-                                <td class="text-center"><?= $employee["tmptlahir"].", ".date('d F Y', strtotime($employee["tgllahir"]));?></td>
-                                <td class="text-center"><?= $employee['jabatan'];?></td>
-                                <td class="text-center">
-                                    <img src="img/<?= $employee["foto"];?>" alt="">
-                                </td>
-                                <td class="text-center">
-                                    <a id="edit" type="button" data-action="edit" data-id="<?= $employee['id']?>" class="btn btn-sm btn-outline-primary edit" data-placement="bottom" onclick="$('#tambahModal').modal('show');">
-                                        Edit
-                                    </a>
-                                    <a id="hapus" type="button" data-action="hapus" data-img="<?= $employee["foto"];?>" data-id="<?= $employee['id']?>" class="btn btn-sm btn-outline-danger hapus" data-placement="bottom"onclick="$('#hapusModal').modal('show');">
-                                        Hapus
-                                    </a>
-                                </td>
-                            </tr>
-                            <?php
-                            $i++; 
-                            endforeach;
-                            ?>
                         </tbody>
                     </table>
                 </div>

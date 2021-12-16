@@ -4,6 +4,82 @@
 
     $aksi = $_POST['aksi'];
 
+
+    if($_GET['action'] == "table_data"){
+ 
+        $columns = array( 
+                                 0 => 'id', 
+                                 1 => 'nama',
+                                 2 => 'tmptlahir',
+                                 3 => 'tgllahir',
+                                 4 => 'jabatan',
+                                 5 => 'foto',
+                                 6 => 'id',
+                             );
+   
+        $querycount = mysqli_query($conn, "SELECT count(id) as jumlah FROM karyawan");
+        $datacount = $querycount->fetch_array();
+      
+     
+          $totalData = $datacount['jumlah'];
+               
+          $totalFiltered = $totalData; 
+   
+          $limit = $_POST['length'];
+          $start = $_POST['start'];
+          $order = $columns[$_POST['order']['0']['column']];
+          $dir = $_POST['order']['0']['dir'];
+               
+          if(empty($_POST['search']['value']))
+          {            
+           $query = mysqli_query($conn, "SELECT id,nama,tmptlahir, tgllahir, jabatan, foto FROM karyawan order by $order $dir
+                                                        LIMIT $limit
+                                                        OFFSET $start");
+          }
+          else {
+              $search = $_POST['search']['value']; 
+              $query = mysqli_query($conn, "SELECT id,nama,tmptlahir, tgllahir, jabatan, foto FROM karyawan WHERE nama LIKE '%$search%'                               
+                                                           order by $order $dir
+                                                           LIMIT $limit
+                                                           OFFSET $start");
+   
+   
+             $querycount = mysqli_query($conn, "SELECT count(id) as jumlah FROM karyawan WHERE nama LIKE '%$search%'
+                                                                          ");
+           $datacount = $querycount->fetch_array();
+             $totalFiltered = $datacount['jumlah'];
+          }
+   
+          $data = array();
+          if(!empty($query))
+          {
+              $no = $start + 1;
+              while ($r = $query->fetch_array())
+              {
+                  $nestedData['no'] = $no;
+                  $nestedData['nama'] = $r['nama'];
+                  $nestedData['tmptlahir'] = $r['tmptlahir'];
+                  $nestedData['tgllahir'] = $r['tgllahir'];
+                  $nestedData['jabatan'] = $r['jabatan'];
+                  $nestedData['foto'] = $r['foto'];
+                  $nestedData['action'] = "<a href='#' class='btn-warning btn-sm'>Ubah</a>&nbsp; <a href='#' class='btn-danger btn-sm'>Hapus</a>";
+                  $data[] = $nestedData;
+                  $no++;
+              }
+          }
+             
+          $json_data = array(
+                      "draw"            => intval($_POST['draw']),  
+                      "recordsTotal"    => intval($totalData),  
+                      "recordsFiltered" => intval($totalFiltered), 
+                      "data"            => $data  
+                      );
+               
+          echo json_encode($json_data); 
+   
+    }
+
+
     if($aksi=="insert") {
         TambahData($_POST, $_FILES);
     } elseif($aksi=="getdata") {
