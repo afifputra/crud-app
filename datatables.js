@@ -11,8 +11,8 @@ $(document).ready( function () {
             {"data" : "no"},
             {"data" : "nama"},
             {"data" : "tmptlahir"},
-            {"data" : "tgllahir"},
             {"data" : "jabatan"},
+            {"data" : "foto"},
             {"data" : "action"},
         ]
     });

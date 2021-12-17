@@ -6,15 +6,14 @@
 
 
     if($_GET['action'] == "table_data"){
- 
         $columns = array( 
                                  0 => 'id', 
                                  1 => 'nama',
                                  2 => 'tmptlahir',
-                                 3 => 'tgllahir',
-                                 4 => 'jabatan',
-                                 5 => 'foto',
-                                 6 => 'id',
+                                //  3 => 'tgllahir',
+                                 3 => 'jabatan',
+                                 4 => 'foto',
+                                 5 => 'id',
                              );
    
         $querycount = mysqli_query($conn, "SELECT count(id) as jumlah FROM karyawan");
@@ -58,15 +57,14 @@
               {
                   $nestedData['no'] = $no;
                   $nestedData['nama'] = $r['nama'];
-                  $nestedData['tmptlahir'] = $r['tmptlahir'];
-                  $nestedData['tgllahir'] = $r['tgllahir'];
+                  $nestedData['tmptlahir'] = $r['tmptlahir'].', '.date('d F Y', strtotime($r['tgllahir']));
                   $nestedData['jabatan'] = $r['jabatan'];
-                  $nestedData['foto'] = $r['foto'];
+                  $nestedData['foto'] = "<img src='img/".$r['foto']."'>";
                   $nestedData['action'] = "
-                    <a id='edit' type='button' data-action='edit' data-id='".$r['id']."' class='btn btn-sm btn-outline-primary edit' data-placement='bottom' onclick='$('#tambahModal').modal('show');'>
+                    <a id='edit' type='button' data-bs-target='#tambahModal' data-bs-toogle='modal' data-action='edit' data-id='".$r['id']."' class='btn btn-sm btn-outline-primary edit' data-placement='bottom'>
                         Edit
                     </a>
-                    <a id='hapus' type='button' data-action='hapus' data-img='".$r['foto']."' data-id='".$r['id']."' class='btn btn-sm btn-outline-danger hapus' data-placement='bottom'onclick='$('#hapusModal').modal('show');'>
+                    <a id='hapus' type='button' data-bs-target='#hapusModal' data-bs-toogle='modal' data-action='hapus' data-img='".$r['foto']."' data-id='".$r['id']."' class='btn btn-sm btn-outline-danger hapus' data-placement='bottom'>
                         Hapus
                     </a>";
                   $data[] = $nestedData;
@@ -87,7 +85,8 @@
 
 
     if($aksi=="insert") {
-        TambahData($_POST, $_FILES);
+        $tambah = TambahData($_POST, $_FILES);
+        echo $tambah;
     } elseif($aksi=="getdata") {
         $getdata = GetData($_POST);
         echo json_encode($getdata);
@@ -95,7 +94,8 @@
         $editdata = EditData($_POST, $_FILES);
         echo $editdata;
     } elseif($aksi=="hapusdata"){
-        HapusData($_POST);
+        $hapus = HapusData($_POST);
+        echo $hapus;
     }
 
     function GetData($id)
@@ -103,7 +103,7 @@
         global $conn;
 
         $id = $id["id"];
-        // var_dump($id);
+        // return var_dump($id);
         $query = "SELECT * FROM karyawan WHERE id = $id";
         $result = mysqli_query($conn, $query);
         $rows = [];
@@ -115,17 +115,18 @@
 
     }
 
-    function BuatQuery($query)
-    {
-        global $conn;
 
-        $result = mysqli_query($conn, $query);
-        $rows = [];
-        while ( $row = mysqli_fetch_assoc($result) ){
-            $rows[] = $row;
-        }
-        return $rows;
-    }
+    // function BuatQuery($query)
+    // {
+    //     global $conn;
+
+    //     $result = mysqli_query($conn, $query);
+    //     $rows = [];
+    //     while ( $row = mysqli_fetch_assoc($result) ){
+    //         $rows[] = $row;
+    //     }
+    //     return $rows;
+    // }
 
     function TambahData($data, $foto)
     {

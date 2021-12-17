@@ -3,10 +3,13 @@ $(document).ready(function() {
     $("#tambah").click(function () {
         $('#textTambah').text('Tambah Data');
         $('#formTambah')[0].reset();
+        $('button#btn-tambah').text('Tambah Data');
         $('#aksi').val("insert");
     })
 
-    $(".edit").click(function() {
+    $("#dataKaryawan").on("click", '.edit' ,function() {
+        let myModal = new bootstrap.Modal($('#tambahModal'));
+        myModal.show();
         $('#textTambah').text('Edit Data');
         $('button#btn-tambah').text('Edit Data');
         $('#aksi').val("edit");
@@ -31,7 +34,7 @@ $(document).ready(function() {
         })
     });
     
-    $(".hapus").click(function () {
+    $("#dataKaryawan").on("click", ".hapus" ,function () {
         let id = $(this).data("id");
         let foto = $(this).data("img");
         let aksi = "hapusdata";
@@ -46,7 +49,7 @@ $(document).ready(function() {
             dataType: "json",
             success: function(dataResult) {
                 if(dataResult.statusCode==200){
-                    $('#hapusModal').modal('toogle');			
+                    $('#dataKaryawan').DataTable().ajax.reload();			
                 }
                 else if(dataResult.statusCode==201){
                     alert("Error occured !");
@@ -71,7 +74,7 @@ $(document).ready(function() {
             console.log(dataResult);
             if(dataResult.statusCode==200){
                 $("#success").show();
-				$('#success').html('Data added successfully !');
+				$('#success').html('Successfully !');
                 $('#dataKaryawan').DataTable().ajax.reload();
             }
             else if(dataResult.statusCode==201){

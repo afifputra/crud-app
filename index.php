@@ -1,8 +1,5 @@
 <?php
     require 'functions.php ';
-    
-    $employees = BuatQuery("SELECT * FROM karyawan");
-
 ?>
 
 <!DOCTYPE html>
@@ -47,7 +44,7 @@
                                 <th class="text-center" class="text-center">Action</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="text-center">
                         </tbody>
                     </table>
                 </div>
@@ -91,7 +88,7 @@
             </div>
 
             <!-- Modal Hapus -->
-            <div class="modal fade" id="hapusModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <!-- <div class="modal fade" id="hapusModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -107,11 +104,11 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                            <button type="submit" name="hapus" id="btn-hapus" class="btn btn-danger">Hapus</button>
+                            <button type="submit" name="submit" id="btn-hapus" class="btn btn-danger">Hapus</button>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
         </div>
     </body>
